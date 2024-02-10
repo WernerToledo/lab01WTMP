@@ -1,0 +1,9 @@
+ModelosDAO\ClienteDAO.class
+Controllers\ControllerPedido.class
+db\cn.class
+Entidades\Pedido.class
+ModelosDAO\PedientesDAO.class
+Controllers\ControllerCliente.class
+com\mycompany\lab01wtmp\JakartaRestConfiguration.class
+com\mycompany\lab01wtmp\resources\JakartaEE10Resource.class
+Entidades\Cliente.class

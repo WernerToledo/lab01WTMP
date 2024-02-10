@@ -1,0 +1,16 @@
+CREATE TABLE clientes (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    dirección VARCHAR(255),
+    telefono VARCHAR(20),
+    email VARCHAR(255)
+);
+
+CREATE TABLE pedidos (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ID_Cliente INT,
+    fecha DATE,
+    total DECIMAL(10, 2),
+    estado VARCHAR(50),
+    FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID)
+);
