@@ -4,10 +4,6 @@
  */
 package Controllers;
 
-
-import Entidades.Pedido;
-
-import ModelosDAO.PedidoDAO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,17 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author ale
  */
-@WebServlet(name = "ControllerPedido", urlPatterns = {"/ControllerPedido"})
-public class ControllerPedido extends HttpServlet {
+@WebServlet(name = "ControllerShowAnio", urlPatterns = {"/ControllerShowAnio"})
+public class ControllerShowAnio extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +37,10 @@ public class ControllerPedido extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControllerPedido</title>");            
+            out.println("<title>Servlet ControllerShowAnio</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ControllerPedido at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ControllerShowAnio at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,32 +59,8 @@ public class ControllerPedido extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String warning = "";
-        List<Pedido> lPedido = new ArrayList<>();
-        
-        PedidoDAO pedidoDAO;
-        try {
-            pedidoDAO = new PedidoDAO();
-                    
-            lPedido = pedidoDAO.getAllPedidos();
-
-            if (lPedido != null) {
-                request.setAttribute("lPedido", lPedido);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("ListPedido.jsp");
-                dispatcher.forward(request,response); 
-            }
-            else{
-                warning = "Sin datos";
-                request.setAttribute("warning", warning);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("ListPedido.jsp");
-                dispatcher.forward(request,response); 
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControllerPedido.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        
-        
+        RequestDispatcher dispatcher=request.getRequestDispatcher("GraficoPAnio.jsp");
+        dispatcher.forward(request,response); 
     }
 
     /**

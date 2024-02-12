@@ -4,9 +4,7 @@
  */
 package Controllers;
 
-
 import Entidades.Pedido;
-
 import ModelosDAO.PedidoDAO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -17,16 +15,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 /**
  *
  * @author ale
  */
-@WebServlet(name = "ControllerPedido", urlPatterns = {"/ControllerPedido"})
-public class ControllerPedido extends HttpServlet {
+@WebServlet(name = "ControllerGrafAnio", urlPatterns = {"/ControllerGrafAnio"})
+public class ControllerGrafAnio extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +45,10 @@ public class ControllerPedido extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControllerPedido</title>");            
+            out.println("<title>Servlet ControllerGrafAnio</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ControllerPedido at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ControllerGrafAnio at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,33 +66,55 @@ public class ControllerPedido extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+           
         
-        String warning = "";
-        List<Pedido> lPedido = new ArrayList<>();
-        
-        PedidoDAO pedidoDAO;
+        List<JSONObject> jsonPedidos = new ArrayList<>();
+
         try {
-            pedidoDAO = new PedidoDAO();
-                    
-            lPedido = pedidoDAO.getAllPedidos();
+            // Obtener la lista de pedidos desde la base de datos
+            PedidoDAO pedidoDAO = new PedidoDAO();
+            List<Pedido> lPedido = pedidoDAO.getTopPedidos();
 
-            if (lPedido != null) {
-                request.setAttribute("lPedido", lPedido);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("ListPedido.jsp");
-                dispatcher.forward(request,response); 
+            // Convertir cada objeto Pedido a JSON
+            for (Pedido pedido : lPedido) {
+                JSONObject jsonPedido = new JSONObject();
+                jsonPedido.put("ID", pedido.getID());
+                jsonPedido.put("mes", pedido.getMes());
+                jsonPedido.put("anio", pedido.getAnio());
+                jsonPedidos.add(jsonPedido);
             }
-            else{
-                warning = "Sin datos";
-                request.setAttribute("warning", warning);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("ListPedido.jsp");
-                dispatcher.forward(request,response); 
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControllerPedido.class.getName()).log(Level.SEVERE, null, ex);
+
+            // Convertir la lista de JSON a una cadena JSON
+            JSONArray jsonArray = new JSONArray(jsonPedidos);
+            String jsonString = jsonArray.toString();
+
+            // Establecer el tipo de contenido de la respuesta como JSON
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            // Escribir la cadena JSON en el cuerpo de la respuesta
+            PrintWriter out = response.getWriter();
+            out.print(jsonString);
+            out.flush();
+            
+
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda ocurrir
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+        
+//        try {
+//            PedidoDAO pedidoDAO = new PedidoDAO();
+//            List<Pedido> lPedido = pedidoDAO.getTopPedidos();
+//            
+//            request.setAttribute("lPedido", lPedido);
+//            RequestDispatcher dispatcher=request.getRequestDispatcher("Grafico.jsp");
+//            dispatcher.forward(request,response); 
+//            
+//        } catch (Exception e) {
+//        }
 
-        
-        
     }
 
     /**

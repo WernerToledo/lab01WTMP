@@ -9,15 +9,17 @@ import java.sql.DriverManager;
 /**@author reqp*/
 public class cn {
     private Connection con;
+    
     public cn() throws ClassNotFoundException{
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca","root","");
+            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/semana04","root","");
             
         }catch (Exception e){
             System.err.println("Error"+e);
         }
     }
+    
     public Connection getConnection() {
         return con;
     }

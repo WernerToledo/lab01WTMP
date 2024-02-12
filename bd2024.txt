@@ -9,7 +9,7 @@ CREATE TABLE clientes (
 CREATE TABLE pedidos (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     ID_Cliente INT,
-    fecha DATE,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     total DECIMAL(10, 2),
     estado VARCHAR(50),
     FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID)

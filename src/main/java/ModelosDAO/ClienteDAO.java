@@ -23,10 +23,14 @@ public class ClienteDAO {
     private PreparedStatement ps;
     private ResultSet rs;
 
+     public ClienteDAO() throws ClassNotFoundException {
+        this.CN = new cn();
+    }
+    
     public List<Cliente> getAll(){
         List<Cliente> listaClientes = new ArrayList<>();
         
-        this.sql = "SELECT * FROM cliente";
+        this.sql = "SELECT * FROM clientes";
         try {
             ps=this.CN.getConnection().prepareStatement(this.sql);
             rs=ps.executeQuery();
@@ -41,6 +45,8 @@ public class ClienteDAO {
                 Cliente cliente = new Cliente(id, nombre, direccion, telefono, email);
                 listaClientes.add(cliente);
             }
+            rs.close();
+            ps.close();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
